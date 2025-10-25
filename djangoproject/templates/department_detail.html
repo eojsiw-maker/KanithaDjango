@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}สาขา: {{ department.name }}{% endblock %}
+{% block content %}
+{% if db_error %}
+  <p class="muted">ข้อมูลสาขวิชายังไม่พร้อม</p>
+{% else %}
+  <div class="card" style="margin-top:12px;padding:14px">
+    <h1>{{ department.name }}</h1>
+    <p class="muted">คณะ: <a class="text-accent" href="{% url 'core:faculty_detail' department.faculty.id %}">{{ department.faculty.name }}</a></p>
+    <h2 style="margin-top:12px">รายวิชา</h2>
+    {% if courses %}
+      <ul>
+        {% for c in courses %}
+          <li><a class="text-accent" href="{% url 'core:course_detail' c.id %}">{{ c.code }} - {{ c.name }}</a> ({{ c.units }} หน่วยกิต)</li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p class="muted">ไม่มีรายวิชา</p>
+    {% endif %}
+  </div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block title %}Form{% endblock %}
+
+{% block content %}
+  <h2>{{ title }}</h2>
+
+  {% if submitted %}
+    <p>Thank you, {{ name|escape }}. Your message:</p>
+    <div style="white-space:pre-wrap; border:1px solid #ddd; padding:8px;">{{ message|escape }}</div>
+    <p><a href="{% url 'form' %}">Submit another</a></p>
+  {% else %}
+    <form method="post">
+      {% csrf_token %}
+      <p><label>Name:<br><input type="text" name="name" /></label></p>
+      <p><label>Message:<br><textarea name="message" rows="5" cols="40"></textarea></label></p>
+      <p><button type="submit">Send</button></p>
+    </form>
+  {% endif %}
+{% endblock %}

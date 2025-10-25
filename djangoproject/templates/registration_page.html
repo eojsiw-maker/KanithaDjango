@@ -1,0 +1,135 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}ลงทะเบียนวิชา{% endblock %}
+
+{% block content %}
+{% block hero_title %}ลงทะเบียนวิชา — เริ่มต้นได้เลย{% endblock %}
+{% block hero_sub %}เลือกวิชา ค้นหาไว และสรุปหน่วยกิตทันทีที่เลือก (เรียลไทม์){% endblock %}
+
+<div class="card" style="margin-top:12px">
+  <div style="margin-bottom:10px;">
+    <div style="font-size:1.2rem;font-weight:700">ลงทะเบียนวิชา — ปี {{ year }} / เทอม {{ semester }}</div>
+    <div class="muted" style="margin-top:6px">
+      <strong>รหัสนักศึกษา:</strong> {{ display_student.student_id|default:"-" }} &nbsp; | &nbsp;
+      <strong>ชื่อ-นามสกุล:</strong> {{ display_student.first_name|default:"-" }} {{ display_student.last_name|default:"" }}
+      <br>
+      <strong>คณะ:</strong> {{ display_student.faculty_name|default:"-" }} &nbsp; | &nbsp; <strong>สาขา:</strong> {{ display_student.department_name|default:"-" }}
+    </div>
+  </div>
+
+  <div style="margin-top:18px">
+    <div style="font-size:1.05rem;font-weight:600; margin-bottom:8px">เลือกวิชาที่ต้องการลงทะเบียน</div>
+    <form method="post">
+      {% csrf_token %}
+      <input type="hidden" name="action" value="register_selected">
+      <input type="text" id="regSearch" class="" placeholder="ค้นหารายวิชา (รหัส/ชื่อ)" style="width:100%;padding:8px;border-radius:8px;border:1px solid #efe8f6;margin-bottom:12px">
+      <table>
+        <thead>
+          <tr>
+            <th style="width:40px"></th>
+            <th>รหัสวิชา</th>
+            <th>ชื่อวิชา</th>
+            <th>หน่วยกิต</th>
+          </tr>
+        </thead>
+        <tbody id="regCourseTable">
+        {% for course in available_courses %}
+          <tr class="reg-course-row" data-code="{{ course.code }}" data-name="{{ course.name }}" data-units="{{ course.credits|default:course.units }}" data-id="{{ course.id }}">
+            <td>
+              <input type="checkbox" name="course_ids" value="{{ course.id }}" class="course-checkbox" {% if cart_ids and course.id in cart_ids %}checked{% endif %}>
+            </td>
+            <td class="col-code">{{ course.code }}</td>
+            <td class="col-name">{{ course.name }}</td>
+            <td class="col-units">{{ course.credits|default:course.units }}</td>
+          </tr>
+        {% empty %}
+          <tr><td colspan="4">ไม่พบรายวิชา</td></tr>
+        {% endfor %}
+        </tbody>
+      </table>
+      <div style="margin-top:16px;">
+        <button type="submit" class="btn btn-primary">ลงทะเบียนที่เลือก</button>
+      </div>
+    </form>
+  </div>
+
+  <div class="summary-card" style="margin-top:16px">
+    <div style="font-weight:600;">สรุปการลงทะเบียน (เรียลไทม์)</div>
+    <div id="summarySelectedList" style="margin-top:8px"></div>
+    <div style="margin-top:8px">จำนวนวิชาที่เลือก: <strong id="summaryCount">0</strong> วิชา</div>
+    <div>จำนวนหน่วยกิตรวม: <strong id="summaryCredits">0</strong> หน่วยกิต</div>
+  </div>
+</div>
+
+<script>
+// ค้นหารายวิชา
+document.getElementById('regSearch').addEventListener('input', function() {
+  const search = this.value.toLowerCase();
+  document.querySelectorAll('.reg-course-row').forEach(row => {
+    const code = row.getAttribute('data-code').toLowerCase();
+    const name = row.getAttribute('data-name').toLowerCase();
+    if (code.includes(search) || name.includes(search)) {
+      row.style.display = '';
+    } else {
+      row.style.display = 'none';
+    }
+  });
+});
+
+// Real-time summary: list selected courses and total credits
+function updateSummary() {
+  const rows = document.querySelectorAll('.reg-course-row');
+  const selected = [];
+  let credits = 0;
+  rows.forEach(row => {
+    const cb = row.querySelector('.course-checkbox');
+    if (cb && cb.checked) {
+      const id = row.getAttribute('data-id');
+      const code = row.getAttribute('data-code');
+      const name = row.getAttribute('data-name');
+      const units = parseInt(row.getAttribute('data-units')) || 0;
+      selected.push({id, code, name, units});
+      credits += units;
+    }
+  });
+
+  const listEl = document.getElementById('summarySelectedList');
+  const countEl = document.getElementById('summaryCount');
+  const creditsEl = document.getElementById('summaryCredits');
+  listEl.innerHTML = '';
+  if (selected.length === 0) {
+    listEl.innerHTML = '<div style="color:#666">ยังไม่ได้เลือกวิชา</div>';
+  } else {
+    const ul = document.createElement('ul');
+    ul.style.paddingLeft = '18px';
+    selected.forEach(s => {
+      const li = document.createElement('li');
+      li.style.marginBottom = '6px';
+      li.innerHTML = `<strong>${s.code}</strong> - ${s.name} (${s.units} หน่วยกิต) <button data-id="${s.id}" class="btn-remove" style="margin-left:8px;padding:2px 8px;border-radius:4px;border:1px solid #ccc;background:#fff;cursor:pointer">ลบ</button>`;
+      ul.appendChild(li);
+    });
+    listEl.appendChild(ul);
+  }
+  countEl.textContent = selected.length;
+  creditsEl.textContent = credits;
+
+  // attach remove handler
+  document.querySelectorAll('.btn-remove').forEach(btn => {
+    btn.onclick = function(e) {
+      const id = this.getAttribute('data-id');
+      const cb = document.querySelector('.course-checkbox[value="' + id + '"]');
+      if (cb) { cb.checked = false; }
+      updateSummary();
+    };
+  });
+}
+
+// initialize summary on load and attach change listeners
+document.addEventListener('DOMContentLoaded', function() {
+  updateSummary();
+  document.querySelectorAll('.course-checkbox').forEach(cb => cb.addEventListener('change', updateSummary));
+});
+</script>
+
+{% endblock %}

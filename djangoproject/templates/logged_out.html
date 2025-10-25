@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}ออกจากระบบ{% endblock %}
+{% block content %}
+  <div style="max-width:600px; margin:24px auto; padding:16px; border:1px solid #ddd;">
+    <h2>ออกจากระบบเรียบร้อย</h2>
+    <p>คุณได้ออกจากระบบเรียบร้อยแล้ว</p>
+    <p>
+      <a href="{% url 'core:login' %}">เข้าสู่ระบบอีกครั้ง</a> |
+      <a href="{% url 'core:index' %}">กลับไปที่หน้าแรก</a>
+    </p>
+  </div>
+{% endblock %}

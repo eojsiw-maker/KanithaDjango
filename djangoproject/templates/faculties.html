@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}คณะ{% endblock %}
+{% block content %}
+{% block hero_title %}คณะ{% endblock %}
+{% block hero_sub %}รายการคณะในระบบ สามารถเพิ่ม/แก้ไขได้ผ่าน Admin{% endblock %}
+
+<div class="card" style="margin-top:12px">
+  <h2>คณะ</h2>
+  <table>
+    <tr><th>ID</th><th>ชื่อคณะ</th><th>รหัส</th></tr>
+    {% for f in faculties %}
+    <tr>
+      <td>{{ forloop.counter }}</td>
+      <td>{{ f.name }}</td>
+      <td>{{ f.code }}</td>
+    </tr>
+    {% empty %}
+    <tr><td colspan="3">ไม่มีข้อมูล</td></tr>
+    {% endfor %}
+  </table>
+  <p style="margin-top:12px">ถ้าต้องการแก้ไข/เพิ่มข้อมูลจริง ให้เข้าไปที่ <a href="/admin/">Admin</a> เพื่อเพิ่มคณะในฐานข้อมูล</p>
+</div>
+{% endblock %}

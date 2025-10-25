@@ -1,0 +1,45 @@
+/* สไตล์เพิ่มเติมสำหรับหน้านี้ ถ้ามี */
+.welcome-section {
+    background-color: #2E8B57; /* สีเขียว Sea Green */
+    border-radius: 15px;
+    padding: 40px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+.welcome-section h1 {
+    color: #FFFFFF; /* สีขาว */
+    font-size: 3.5rem;
+    margin-bottom: 25px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+.welcome-section p {
+    font-size: 1.2rem;
+    color: #e0f2f7; /* สีเขียวอ่อนมาก */
+    line-height: 1.8;
+    max-width: 800px;
+    margin: 0 auto 30px auto;
+}
+.welcome-image {
+    max-width: 70%; /* ปรับขนาดรูปภาพ */
+    height: auto;
+    border-radius: 50%; /* ทำให้รูปภาพเป็นวงกลม */
+    border: 5px solid #1b5e20; /* สีเขียวเข้ม */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    margin-bottom: 30px;
+}
+.cta-button {
+    margin: 10px;
+    padding: 15px 30px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    border-radius: 50px; /* ปุ่มโค้งมน */
+    transition: all 0.3s ease;
+    background-color: #4CAF50; /* สีเขียวสดใสสำหรับปุ่ม */
+    color: white;
+    border: none;
+}
+.cta-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+    background-color: #388E3C; /* สีเขียวเข้มขึ้นเมื่อโฮเวอร์ */
+}

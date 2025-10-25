@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}{{ course.code }} - {{ course.name }}{% endblock %}
+{% block content %}
+{% if db_error %}
+  <p>ข้อมูลวิชายังไม่พร้อม</p>
+{% else %}
+  <h1>{{ course.code }} - {{ course.name }}</h1>
+  <p>หน่วยกิต: {{ course.units }}</p>
+  <p>สาขา: <a href="{% url 'core:department_detail' course.department.id %}">{{ course.department.name }}</a></p>
+
+  <h2>ผู้ลงทะเบียน (ตัวอย่าง)</h2>
+  {% if registrations %}
+    <ul>
+      {% for r in registrations %}
+        <li>{{ r.student.student_id }} - {{ r.student.first_name }} {{ r.student.last_name }} (ปี {{ r.year }} ภาค {{ r.semester }}) - เกรด: {{ r.grade|default:"-" }}</li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>ยังไม่มีผู้ลงทะเบียน</p>
+  {% endif %}
+
+  {% if request.user.is_authenticated %}
+    <p><a href="{% url 'core:register' %}">ลงทะเบียนวิชานี้</a></p>
+  {% else %}
+    <p><a href="{% url 'core:login' %}">เข้าสู่ระบบ</a> เพื่อทำการลงทะเบียน</p>
+  {% endif %}
+{% endif %}
+{% endblock %}

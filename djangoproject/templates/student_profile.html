@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}โปรไฟล์นักศึกษา: {{ student.student_id }}{% endblock %}
+{% block content %}
+{% if db_error %}
+  <p class="muted">ข้อมูลนักศึกษายังไม่พร้อม</p>
+{% else %}
+  {% block hero_title %}โปรไฟล์: {{ student.first_name }} {{ student.last_name }}{% endblock %}
+  {% block hero_sub %}รหัสนักศึกษา: {{ student.student_id }} — ข้อมูลส่วนตัวและรายการลงทะเบียน{% endblock %}
+
+  <div class="card" style="margin-top:12px;padding:14px">
+    <h1 style="margin:0">{{ student.first_name }} {{ student.last_name }} <small style="font-size:0.9rem;color:var(--muted)">({{ student.student_id }})</small></h1>
+    <p class="muted">สาขา: {% if student.department %}{{ student.department.name }}{% else %}-{% endif %}</p>
+
+    <h2 style="margin-top:12px">รายการลงทะเบียน</h2>
+    {% if registrations %}
+      <table>
+        <tr><th>วิชา</th><th>ปี</th><th>ภาค</th><th>หน่วยกิต</th><th>เกรด</th></tr>
+        {% for r in registrations %}
+        <tr>
+          <td><a class="text-accent" href="{% url 'core:course_detail' r.course.id %}">{{ r.course.code }} - {{ r.course.name }}</a></td>
+          <td>{{ r.year }}</td>
+          <td>{{ r.semester }}</td>
+          <td>{{ r.units }}</td>
+          <td>{{ r.grade|default:"-" }}</td>
+        </tr>
+        {% endfor %}
+      </table>
+    {% else %}
+      <p class="muted">ยังไม่มีการลงทะเบียน</p>
+    {% endif %}
+  </div>
+{% endif %}
+{% endblock %}

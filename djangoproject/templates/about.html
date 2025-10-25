@@ -1,0 +1,685 @@
+{% extends "base.html" %}
+
+{% block title %}ตารางเรียนออนไลน์{% endblock %}
+
+{% block hero %}
+<section class="hero">
+  <div class="hero-inner container">
+    <div class="hero-text">
+      <h1>ลงทะเบียนวิชาออนไลน์ ง่ายและทันใจ</h1>
+      <p>ระบบลงทะเบียนออนไลน์ที่ช่วยให้การจัดการรายวิชาของคุณเป็นเรื่องง่าย พร้อมระบบค้นหาที่รวดเร็วและแม่นยำ</p>
+      <div class="hero-cta">
+        <a class="btn btn-primary btn-lg" href="{% url 'core:register' %}">
+          <i class="fas fa-pencil-alt"></i> เริ่มลงทะเบียนเลย
+        </a>
+        <a class="btn btn-secondary btn-lg" href="{% url 'core:courses' %}">
+          <i class="fas fa-search"></i> ค้นหาวิชา
+        </a>
+      </div>
+    </div>
+    <div class="hero-illustration">
+      <svg viewBox="0 0 220 220" xmlns="http://www.w3.org/2000/svg" role="img">
+        <defs>
+          <linearGradient id="calendarGrad" x1="0" x2="1" y1="0" y2="1">
+            <stop offset="0" stop-color="#9333ea" stop-opacity="0.9"/>
+            <stop offset="1" stop-color="#ec4899" stop-opacity="0.7"/>
+          </linearGradient>
+          <filter id="shadow">
+            <feGaussianBlur in="SourceAlpha" stdDeviation="3"/>
+            <feOffset dx="2" dy="4"/>
+            <feComponentTransfer>
+              <feFuncA type="linear" slope="0.3"/>
+            </feComponentTransfer>
+            <feMerge>
+              <feMergeNode/>
+              <feMergeNode in="SourceGraphic"/>
+            </feMerge>
+          </filter>
+        </defs>
+        <!-- Calendar/Schedule icon with modern style -->
+        <g filter="url(#shadow)">
+          <rect x="40" y="50" width="140" height="140" rx="16" fill="url(#calendarGrad)" opacity="0.15"/>
+          <rect x="45" y="55" width="130" height="130" rx="14" fill="rgba(255,255,255,0.95)" stroke="#9333ea" stroke-width="2.5"/>
+          
+          <!-- Header section -->
+          <rect x="45" y="55" width="130" height="30" rx="14" fill="url(#calendarGrad)"/>
+          <circle cx="65" cy="60" r="3" fill="white"/>
+          <circle cx="155" cy="60" r="3" fill="white"/>
+          
+          <!-- Grid lines -->
+          <line x1="45" y1="95" x2="175" y2="95" stroke="#e9d5ff" stroke-width="2"/>
+          <line x1="85" y1="95" x2="85" y2="185" stroke="#e9d5ff" stroke-width="2"/>
+          <line x1="125" y1="95" x2="125" y2="185" stroke="#e9d5ff" stroke-width="2"/>
+          <line x1="45" y1="125" x2="175" y2="125" stroke="#e9d5ff" stroke-width="2"/>
+          <line x1="45" y1="155" x2="175" y2="155" stroke="#e9d5ff" stroke-width="2"/>
+          
+          <!-- Decorative checkmarks -->
+          <circle cx="65" cy="110" r="6" fill="#a855f7" opacity="0.8"/>
+          <path d="M62 110 L64 112 L68 108" stroke="white" stroke-width="2" fill="none" stroke-linecap="round"/>
+          
+          <circle cx="105" cy="140" r="6" fill="#ec4899" opacity="0.8"/>
+          <path d="M102 140 L104 142 L108 138" stroke="white" stroke-width="2" fill="none" stroke-linecap="round"/>
+          
+          <circle cx="145" cy="170" r="6" fill="#9333ea" opacity="0.8"/>
+          <path d="M142 170 L144 172 L148 168" stroke="white" stroke-width="2" fill="none" stroke-linecap="round"/>
+        </g>
+        
+        <!-- Floating decoration -->
+        <circle cx="25" cy="30" r="4" fill="#ec4899" opacity="0.6">
+          <animate attributeName="cy" values="30;25;30" dur="3s" repeatCount="indefinite"/>
+        </circle>
+        <circle cx="195" cy="195" r="5" fill="#a855f7" opacity="0.6">
+          <animate attributeName="cy" values="195;190;195" dur="4s" repeatCount="indefinite"/>
+        </circle>
+      </svg>
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block content %}
+<div class="main-content">
+  <div class="content-grid">
+    <!-- ข้อมูลทั่วไป -->
+    <div class="info-section feature-card">
+      <div class="card-glow"></div>
+      <div class="section-header">
+        <div class="icon-wrapper">
+          <i class="fas fa-info-circle"></i>
+        </div>
+        <h2>ยินดีต้อนรับสู่ระบบลงทะเบียนออนไลน์</h2>
+      </div>
+      <p class="lead-text">
+        ระบบลงทะเบียนออนไลน์ที่ออกแบบมาเพื่อให้การจัดการวิชาเรียนของคุณเป็นเรื่องง่าย 
+        พร้อมฟีเจอร์ที่ทันสมัยและใช้งานได้อย่างสะดวกสบาย
+      </p>
+      <div class="feature-grid">
+        <div class="feature-item">
+          <div class="feature-icon">
+            <i class="fas fa-search"></i>
+          </div>
+          <h3>ค้นหาง่าย</h3>
+          <p>ค้นหาวิชาที่ต้องการได้อย่างรวดเร็วด้วยระบบค้นหาแบบเรียลไทม์</p>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">
+            <i class="fas fa-clock"></i>
+          </div>
+          <h3>ประหยัดเวลา</h3>
+          <p>ลงทะเบียนได้ทุกที่ ทุกเวลา ผ่านอุปกรณ์ที่คุณสะดวก</p>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">
+            <i class="fas fa-check-circle"></i>
+          </div>
+          <h3>ตรวจสอบง่าย</h3>
+          <p>ดูผลการลงทะเบียนและสรุปหน่วยกิตได้ทันที</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ขั้นตอนการใช้งาน -->
+    <div class="steps-section feature-card">
+      <div class="card-glow"></div>
+      <div class="section-header">
+        <div class="icon-wrapper">
+          <i class="fas fa-list-ol"></i>
+        </div>
+        <h2>ขั้นตอนการใช้งาน</h2>
+      </div>
+      <div class="steps-list">
+        <div class="step-item">
+          <div class="step-number">
+            <span>1</span>
+          </div>
+          <div class="step-content">
+            <h3>สมัครสมาชิก</h3>
+            <p>กรอกข้อมูลเพื่อสร้างบัญชีผู้ใช้งานในระบบ ใช้เวลาเพียงไม่กี่นาที</p>
+          </div>
+          <div class="step-icon">
+            <i class="fas fa-user-plus"></i>
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-number">
+            <span>2</span>
+          </div>
+          <div class="step-content">
+            <h3>เลือกวิชา</h3>
+            <p>ค้นหาและเลือกวิชาที่ต้องการลงทะเบียน พร้อมดูรายละเอียดวิชาแต่ละวิชา</p>
+          </div>
+          <div class="step-icon">
+            <i class="fas fa-book-open"></i>
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-number">
+            <span>3</span>
+          </div>
+          <div class="step-content">
+            <h3>ยืนยันการลงทะเบียน</h3>
+            <p>ตรวจสอบรายวิชาที่เลือกและยืนยันการลงทะเบียนเพื่อเสร็จสิ้นขั้นตอน</p>
+          </div>
+          <div class="step-icon">
+            <i class="fas fa-check-double"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- สถิติการใช้งาน -->
+    <div class="stats-section feature-card">
+      <div class="card-glow"></div>
+      <div class="section-header">
+        <div class="icon-wrapper">
+          <i class="fas fa-chart-line"></i>
+        </div>
+        <h2>สถิติระบบ</h2>
+      </div>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <div class="stat-icon">
+            <i class="fas fa-users"></i>
+          </div>
+          <div class="stat-value">1,000+</div>
+          <div class="stat-label">นักศึกษาในระบบ</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-icon">
+            <i class="fas fa-book"></i>
+          </div>
+          <div class="stat-value">500+</div>
+          <div class="stat-label">รายวิชาทั้งหมด</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-icon">
+            <i class="fas fa-university"></i>
+          </div>
+          <div class="stat-value">20+</div>
+          <div class="stat-label">คณะและสาขา</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ติดต่อ/สอบถาม -->
+    <div class="contact-section feature-card">
+      <div class="card-glow"></div>
+      <div class="section-header">
+        <div class="icon-wrapper">
+          <i class="fas fa-headset"></i>
+        </div>
+        <h2>ติดต่อสอบถาม</h2>
+      </div>
+      <p class="contact-intro">
+        มีคำถามหรือต้องการความช่วยเหลือ? ทีมงานของเรายินดีให้บริการ
+      </p>
+      <div class="contact-info">
+        <div class="contact-item">
+          <div class="contact-icon">
+            <i class="fas fa-envelope"></i>
+          </div>
+          <div class="contact-details">
+            <strong>อีเมล</strong>
+            <p>email@university.ac.th</p>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon">
+            <i class="fas fa-phone"></i>
+          </div>
+          <div class="contact-details">
+            <strong>โทรศัพท์</strong>
+            <p>02-xxx-xxxx</p>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon">
+            <i class="fas fa-clock"></i>
+          </div>
+          <div class="contact-details">
+            <strong>เวลาทำการ</strong>
+            <p>จันทร์ - ศุกร์ 8:30 - 16:30 น.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+/* Main Content Wrapper */
+.main-content {
+  padding: 48px 0 80px;
+  position: relative;
+}
+
+.content-grid {
+  display: grid;
+  gap: 32px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* Enhanced Feature Cards */
+.feature-card {
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  padding: 40px;
+  box-shadow: 0 4px 20px rgba(147, 51, 234, 0.08);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(147, 51, 234, 0.1);
+}
+
+.feature-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #9333ea 0%, #ec4899 50%, #a855f7 100%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.feature-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 40px rgba(147, 51, 234, 0.15);
+  border-color: rgba(147, 51, 234, 0.3);
+}
+
+.feature-card:hover::before {
+  opacity: 1;
+}
+
+/* Card Glow Effect */
+.card-glow {
+  position: absolute;
+  top: -50%;
+  right: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(147, 51, 234, 0.1) 0%, transparent 70%);
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  pointer-events: none;
+}
+
+.feature-card:hover .card-glow {
+  opacity: 1;
+}
+
+/* Section Headers */
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 32px;
+  padding-bottom: 20px;
+  border-bottom: 2px solid rgba(147, 51, 234, 0.1);
+}
+
+.icon-wrapper {
+  width: 48px;
+  height: 48px;
+  background: linear-gradient(135deg, #9333ea 0%, #ec4899 100%);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.5rem;
+  box-shadow: 0 4px 12px rgba(147, 51, 234, 0.3);
+  flex-shrink: 0;
+}
+
+.section-header h2 {
+  margin: 0;
+  font-size: 1.75rem;
+  font-weight: 600;
+  background: linear-gradient(135deg, #9333ea 0%, #ec4899 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Lead Text */
+.lead-text {
+  font-size: 1.125rem;
+  color: #6b7280;
+  line-height: 1.8;
+  margin-bottom: 32px;
+}
+
+/* Feature Grid */
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 24px;
+  margin-top: 32px;
+}
+
+.feature-item {
+  text-align: center;
+  padding: 32px 24px;
+  background: linear-gradient(135deg, rgba(147, 51, 234, 0.03) 0%, rgba(236, 72, 153, 0.03) 100%);
+  border-radius: 16px;
+  transition: all 0.3s ease;
+  border: 1px solid rgba(147, 51, 234, 0.1);
+}
+
+.feature-item:hover {
+  transform: translateY(-4px);
+  background: linear-gradient(135deg, rgba(147, 51, 234, 0.08) 0%, rgba(236, 72, 153, 0.08) 100%);
+  box-shadow: 0 8px 24px rgba(147, 51, 234, 0.12);
+}
+
+.feature-icon {
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 20px;
+  background: linear-gradient(135deg, #9333ea 0%, #ec4899 100%);
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.75rem;
+  color: white;
+  box-shadow: 0 4px 16px rgba(147, 51, 234, 0.3);
+}
+
+.feature-item h3 {
+  margin: 0 0 12px 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.feature-item p {
+  margin: 0;
+  color: #6b7280;
+  line-height: 1.6;
+  font-size: 0.95rem;
+}
+
+/* Steps List */
+.steps-list {
+  display: grid;
+  gap: 24px;
+}
+
+.step-item {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 20px;
+  align-items: center;
+  padding: 24px;
+  background: linear-gradient(135deg, rgba(147, 51, 234, 0.03) 0%, rgba(236, 72, 153, 0.03) 100%);
+  border-radius: 16px;
+  transition: all 0.3s ease;
+  border: 1px solid rgba(147, 51, 234, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+.step-item::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: linear-gradient(180deg, #9333ea 0%, #ec4899 100%);
+  transform: scaleY(0);
+  transition: transform 0.3s ease;
+}
+
+.step-item:hover {
+  background: linear-gradient(135deg, rgba(147, 51, 234, 0.08) 0%, rgba(236, 72, 153, 0.08) 100%);
+  box-shadow: 0 8px 24px rgba(147, 51, 234, 0.12);
+  transform: translateX(4px);
+}
+
+.step-item:hover::before {
+  transform: scaleY(1);
+}
+
+.step-number {
+  width: 48px;
+  height: 48px;
+  background: linear-gradient(135deg, #9333ea 0%, #ec4899 100%);
+  color: white;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 1.25rem;
+  flex-shrink: 0;
+  box-shadow: 0 4px 12px rgba(147, 51, 234, 0.3);
+}
+
+.step-content h3 {
+  margin: 0 0 8px 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.step-content p {
+  margin: 0;
+  color: #6b7280;
+  line-height: 1.6;
+}
+
+.step-icon {
+  width: 48px;
+  height: 48px;
+  background: rgba(147, 51, 234, 0.1);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #9333ea;
+  font-size: 1.25rem;
+  flex-shrink: 0;
+}
+
+/* Stats Grid */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 24px;
+  margin-top: 32px;
+}
+
+.stat-item {
+  text-align: center;
+  padding: 32px 24px;
+  background: linear-gradient(135deg, rgba(147, 51, 234, 0.05) 0%, rgba(236, 72, 153, 0.05) 100%);
+  border-radius: 16px;
+  transition: all 0.3s ease;
+  border: 1px solid rgba(147, 51, 234, 0.15);
+}
+
+.stat-item:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(147, 51, 234, 0.15);
+  border-color: rgba(147, 51, 234, 0.3);
+}
+
+.stat-icon {
+  width: 56px;
+  height: 56px;
+  margin: 0 auto 16px;
+  background: linear-gradient(135deg, #9333ea 0%, #ec4899 100%);
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  color: white;
+  box-shadow: 0 4px 16px rgba(147, 51, 234, 0.3);
+}
+
+.stat-value {
+  font-size: 2.25rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #9333ea 0%, #ec4899 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 8px;
+}
+
+.stat-label {
+  color: #6b7280;
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+/* Contact Section */
+.contact-intro {
+  color: #6b7280;
+  line-height: 1.8;
+  margin-bottom: 32px;
+  font-size: 1.0625rem;
+}
+
+.contact-info {
+  display: grid;
+  gap: 20px;
+}
+
+.contact-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  padding: 20px;
+  background: linear-gradient(135deg, rgba(147, 51, 234, 0.03) 0%, rgba(236, 72, 153, 0.03) 100%);
+  border-radius: 14px;
+  transition: all 0.3s ease;
+  border: 1px solid rgba(147, 51, 234, 0.1);
+}
+
+.contact-item:hover {
+  background: linear-gradient(135deg, rgba(147, 51, 234, 0.08) 0%, rgba(236, 72, 153, 0.08) 100%);
+  transform: translateX(4px);
+  box-shadow: 0 4px 16px rgba(147, 51, 234, 0.1);
+}
+
+.contact-icon {
+  width: 48px;
+  height: 48px;
+  background: linear-gradient(135deg, #9333ea 0%, #ec4899 100%);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.25rem;
+  flex-shrink: 0;
+  box-shadow: 0 4px 12px rgba(147, 51, 234, 0.3);
+}
+
+.contact-details {
+  flex: 1;
+}
+
+.contact-details strong {
+  display: block;
+  color: #1f2937;
+  font-size: 1.0625rem;
+  margin-bottom: 4px;
+  font-weight: 600;
+}
+
+.contact-details p {
+  margin: 0;
+  color: #6b7280;
+  font-size: 0.9375rem;
+}
+
+/* Secondary Button */
+.btn-secondary {
+  background: white;
+  color: #9333ea;
+  border: 2px solid #9333ea;
+}
+
+.btn-secondary:hover {
+  background: #9333ea;
+  color: white;
+  border-color: #9333ea;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .feature-card {
+    padding: 28px 20px;
+  }
+
+  .section-header {
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+  }
+
+  .section-header h2 {
+    font-size: 1.5rem;
+  }
+
+  .feature-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .step-item {
+    grid-template-columns: auto 1fr;
+    grid-template-rows: auto auto;
+  }
+
+  .step-icon {
+    grid-column: 2;
+    grid-row: 1;
+    justify-self: end;
+  }
+
+  .step-content {
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
+
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .hero-text h1 {
+    font-size: 2rem;
+  }
+
+  .hero-cta {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .hero-cta .btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .content-grid {
+    padding: 0 16px;
+  }
+
+  .feature-card {
+    padding: 24px 16px;
+  }
+}
+</style>
+{% endblock %}

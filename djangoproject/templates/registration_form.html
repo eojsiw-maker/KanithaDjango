@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}ลงทะเบียนวิชา{% endblock %}
+
+{% block content %}
+<h2>ลงทะเบียนวิชา (ปี {{ year }} / เทอม {{ semester }})</h2>
+
+{% if db_error %}
+  <p style="color:orange;">ระบบยังไม่เชื่อมฐานข้อมูล – กำลังแสดงตัวอย่าง</p>
+{% endif %}
+
+{% if errors %}
+  <div style="color:#900; background:#ffecec; padding:8px; margin-bottom:12px;">
+    <ul>
+      {% for e in errors %}
+        <li>{{ e }}</li>
+      {% endfor %}
+    </ul>
+  </div>
+{% endif %}
+{% for m in messages %}
+  <div style="color:green;">{{ m }}</div>
+{% endfor %}
+
+
+{% endblock %}

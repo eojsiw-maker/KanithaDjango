@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}คณะ: {{ faculty.name }}{% endblock %}
+{% block content %}
+{% if db_error %}
+  <p class="muted">ข้อมูลคณะยังไม่พร้อม (ฐานข้อมูลยังไม่ได้สร้าง)</p>
+{% else %}
+  <div class="card" style="margin-top:12px;padding:14px">
+    <h1>{{ faculty.name }}</h1>
+    <p class="muted">รหัส: {{ faculty.code }}</p>
+    <h2 style="margin-top:12px">สาขาวิชา</h2>
+    {% if departments %}
+      <ul>
+        {% for d in departments %}
+          <li><a class="text-accent" href="{% url 'core:department_detail' d.id %}">{{ d.name }}</a></li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p class="muted">ไม่มีสาขาวิชา</p>
+    {% endif %}
+  </div>
+{% endif %}
+{% endblock %}

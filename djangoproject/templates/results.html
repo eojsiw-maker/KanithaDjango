@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}ผลการเรียน{% endblock %}
+{% block content %}
+{% block hero_title %}ผลการเรียนของฉัน{% endblock %}
+{% block hero_sub %}สรุปหน่วยกิตและ GPA ของคุณ พร้อมรายละเอียดรายวิชา{% endblock %}
+
+<div class="card" style="margin-top:12px">
+  <h2>ผลการเรียน</h2>
+  {% if results %}
+    {% for r in results %}
+      <div style="margin-bottom:18px; padding:12px; border-radius:8px; border:1px solid rgba(0,0,0,0.03); background:linear-gradient(180deg,rgba(255,255,255,0.4),rgba(255,255,255,0.2));">
+        <div><strong>รหัสนักศึกษา:</strong> {{ r.student.student_id }}</div>
+        <div><strong>ชื่อ-นามสกุล:</strong> {{ r.student.first_name }} {{ r.student.last_name }}</div>
+        <div><strong>หน่วยกิตรวม:</strong> {{ r.total_units }}</div>
+        <div><strong>GPA:</strong> {% if r.gpa != None %}{{ r.gpa }}{% else %}-{% endif %}</div>
+
+        <div style="margin-top:12px">
+          <strong>รายละเอียดรายวิชาและเกรด</strong>
+          {% if r.registrations and r.registrations.exists %}
+            <table style="width:100%; margin-top:8px; border-collapse:collapse;">
+              <tr style="background:#f8f8f8;"><th style="text-align:left;padding:6px">รหัส</th><th style="text-align:left;padding:6px">ชื่อวิชา</th><th style="text-align:left;padding:6px">หน่วยกิต</th><th style="text-align:left;padding:6px">เกรด</th></tr>
+              {% for reg in r.registrations %}
+                <tr><td style="padding:6px">{{ reg.course.code }}</td><td style="padding:6px">{{ reg.course.name }}</td><td style="padding:6px">{{ reg.units }}</td><td style="padding:6px">{{ reg.grade|default:'-' }}</td></tr>
+              {% endfor %}
+            </table>
+          {% else %}
+            <div style="margin-top:8px" class="muted">ยังไม่มีผลการเรียน</div>
+          {% endif %}
+        </div>
+      </div>
+    {% endfor %}
+  {% else %}
+    <div class="muted">ไม่พบข้อมูลผลการเรียนของคุณ หากยังไม่มีข้อมูลให้ติดต่อผู้ดูแลระบบ</div>
+  {% endif %}
+</div>
+{% endblock %}

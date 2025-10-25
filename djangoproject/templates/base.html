@@ -1,0 +1,553 @@
+{% load static %}
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}ระบบลงทะเบียน{% endblock %}</title>
+  
+  <!-- Modern Thai-compatible fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;600;700&family=Kanit:wght@300;400;500;600&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  
+  <!-- Theme CSS -->
+  <link rel="stylesheet" href="{% static 'css/theme.css' %}">
+  
+  <style>
+    :root {
+      --primary: #9333ea;
+      --primary-dark: #7c3aed;
+      --primary-light: #a855f7;
+      --secondary: #ec4899;
+      --accent: #f472b6;
+      --bg-main: #faf8ff;
+      --bg-card: #ffffff;
+      --text-main: #1f2937;
+      --text-muted: #6b7280;
+      --border: #e9d5ff;
+      --shadow: rgba(147, 51, 234, 0.1);
+      --shadow-lg: rgba(147, 51, 234, 0.15);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Noto Sans Thai', 'Kanit', -apple-system, sans-serif;
+      background: linear-gradient(135deg, #faf8ff 0%, #f3e8ff 100%);
+      color: var(--text-main);
+      line-height: 1.7;
+      min-height: 100vh;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* Enhanced Navigation */
+    nav {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+      padding: 16px 0;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 2px 12px var(--shadow);
+    }
+
+    nav .container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .nav-group {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .nav-link {
+      padding: 10px 18px;
+      border-radius: 10px;
+      text-decoration: none;
+      color: var(--text-main);
+      font-weight: 500;
+      font-size: 15px;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      white-space: nowrap;
+    }
+
+    .nav-link:hover {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+      color: white;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px var(--shadow-lg);
+    }
+
+    .user-greeting {
+      padding: 10px 18px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #fae8ff 0%, #f3e8ff 100%);
+      color: var(--primary-dark);
+      font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      white-space: nowrap;
+      font-size: 15px;
+    }
+
+    /* Hero Section */
+    .hero {
+      padding: 80px 0 100px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -20%;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(168, 85, 247, 0.15) 0%, transparent 70%);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    .hero-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-text h1 {
+      font-family: 'Kanit', 'Noto Sans Thai', sans-serif;
+      font-size: 52px;
+      font-weight: 700;
+      line-height: 1.3;
+      margin-bottom: 24px;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      word-wrap: break-word;
+      hyphens: auto;
+    }
+
+    .hero-text p {
+      font-size: 19px;
+      line-height: 1.8;
+      color: var(--text-muted);
+      margin-bottom: 36px;
+      max-width: 600px;
+      word-wrap: break-word;
+      hyphens: auto;
+    }
+
+    .hero-cta {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    /* Enhanced Buttons */
+    .btn {
+      padding: 14px 32px;
+      border-radius: 12px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 16px;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      border: none;
+      cursor: pointer;
+      white-space: nowrap;
+      font-family: 'Noto Sans Thai', 'Kanit', sans-serif;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+      color: white;
+      box-shadow: 0 4px 20px var(--shadow-lg);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 30px var(--shadow-lg);
+    }
+
+    .btn-lg {
+      padding: 18px 40px;
+      font-size: 18px;
+    }
+
+    .btn-sm {
+      padding: 8px 20px;
+      font-size: 14px;
+    }
+
+    /* Illustration */
+    .hero-illustration {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      animation: float 6s ease-in-out infinite;
+    }
+
+    .hero-illustration svg {
+      width: 100%;
+      max-width: 400px;
+      filter: drop-shadow(0 10px 40px var(--shadow));
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-20px); }
+    }
+
+    /* Database Warning */
+    .db-warning {
+      background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+      border-left: 4px solid #f59e0b;
+      padding: 24px;
+      margin: 32px 0;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(245, 158, 11, 0.1);
+      line-height: 1.8;
+      word-wrap: break-word;
+    }
+
+    .db-warning i {
+      margin-right: 12px;
+      color: #f59e0b;
+    }
+
+    .kbd {
+      background: rgba(0, 0, 0, 0.05);
+      padding: 4px 12px;
+      border-radius: 6px;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      display: inline-block;
+      margin: 4px;
+      white-space: nowrap;
+    }
+
+    /* Content Area */
+    #content-wrapper {
+      min-height: 400px;
+      padding: 40px 0;
+    }
+
+    /* Footer */
+    .footer {
+      background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
+      color: white;
+      padding: 40px 0;
+      margin-top: 80px;
+      text-align: center;
+      box-shadow: 0 -4px 20px var(--shadow);
+    }
+
+    .footer p {
+      margin: 0;
+      font-size: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .text-accent {
+      color: var(--accent);
+      animation: heartbeat 1.5s ease-in-out infinite;
+    }
+
+    @keyframes heartbeat {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+    }
+
+    /* Responsive Design */
+    @media (max-width: 968px) {
+      .hero-inner {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
+
+      .hero-text h1 {
+        font-size: 38px;
+      }
+
+      .hero-text p {
+        font-size: 17px;
+      }
+
+      .hero-illustration {
+        order: -1;
+      }
+
+      nav .container {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .nav-group {
+        justify-content: center;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .hero-text h1 {
+        font-size: 32px;
+      }
+
+      .hero-text p {
+        font-size: 16px;
+      }
+
+      .btn-lg {
+        width: 100%;
+        justify-content: center;
+      }
+
+      .nav-link {
+        flex: 1;
+        justify-content: center;
+        font-size: 14px;
+        padding: 10px 14px;
+      }
+
+      .user-greeting {
+        width: 100%;
+        justify-content: center;
+      }
+    }
+
+    /* Enhanced Card Styles for Content */
+    .card {
+      background: var(--bg-card);
+      border-radius: 16px;
+      padding: 32px;
+      box-shadow: 0 4px 20px var(--shadow);
+      margin-bottom: 24px;
+      transition: all 0.3s ease;
+      word-wrap: break-word;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 30px var(--shadow-lg);
+    }
+
+    /* Text Utilities */
+    .text-muted {
+      color: var(--text-muted);
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+      font-family: 'Kanit', 'Noto Sans Thai', sans-serif;
+      line-height: 1.4;
+      margin-bottom: 16px;
+      word-wrap: break-word;
+    }
+
+    p {
+      margin-bottom: 16px;
+      word-wrap: break-word;
+      hyphens: auto;
+    }
+
+    /* Loading Animation */
+    @keyframes gradient {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page-wrapper">
+    <!-- Navigation -->
+    <nav>
+      <div class="container">
+        <div class="nav-group">
+          <a href="{% url 'core:index' %}" class="nav-link">
+            <i class="fas fa-home"></i> หน้าแรก
+          </a>
+          <a href="{% url 'core:faculties' %}" class="nav-link">
+            <i class="fas fa-university"></i> คณะ
+          </a>
+          <a href="{% url 'core:departments' %}" class="nav-link">
+            <i class="fas fa-building"></i> สาขา
+          </a>
+          <a href="{% url 'core:courses' %}" class="nav-link">
+            <i class="fas fa-book"></i> วิชา
+          </a>
+          {% if request.user.is_authenticated %}
+            <a href="{% url 'core:students' %}" class="nav-link">
+              <i class="fas fa-users"></i> นักศึกษา
+            </a>
+            <a href="{% url 'core:register' %}" class="nav-link">
+              <i class="fas fa-edit"></i> ลงทะเบียน
+            </a>
+            <a href="{% url 'core:registrations' %}" class="nav-link">
+              <i class="fas fa-list"></i> รายการลงทะเบียน
+            </a>
+            <a href="{% url 'core:results' %}" class="nav-link">
+              <i class="fas fa-star"></i> ผลการเรียน
+            </a>
+          {% endif %}
+        </div>
+        <div class="nav-group user-nav">
+          {% if request.user.is_authenticated %}
+            <span class="user-greeting">
+              <i class="fas fa-user-circle"></i>
+              สวัสดี, {{ request.user.get_full_name|default:request.user.username }}
+            </span>
+            <a href="{% url 'core:logout' %}" class="nav-link">
+              <i class="fas fa-sign-out-alt"></i> ออกจากระบบ
+            </a>
+            {% if request.user.is_staff %}
+              <a href="/admin/" class="nav-link">
+                <i class="fas fa-cog"></i> Admin
+              </a>
+            {% endif %}
+          {% else %}
+            <a href="{% url 'core:login' %}" class="nav-link">
+              <i class="fas fa-sign-in-alt"></i> เข้าสู่ระบบ
+            </a>
+            <a href="{% url 'core:signup' %}" class="nav-link btn btn-primary btn-sm">
+              <i class="fas fa-user-plus"></i> สมัครสมาชิก
+            </a>
+          {% endif %}
+        </div>
+      </div>
+    </nav>
+
+    <!-- Hero Section -->
+    {% block hero %}
+    <section class="hero" aria-label="hero banner">
+      <div class="hero-inner container">
+        <div class="hero-text">
+          <h1>{% block hero_title %}ลงทะเบียนวิชาออนไลน์ ง่ายและทันใจ{% endblock %}</h1>
+          <p>{% block hero_sub %}เลือกและจัดการรายวิชาของคุณในที่เดียว ระบบรองรับการค้นหาแบบเรียลไทม์ และสรุปหน่วยกิตทันทีที่คุณเลือกวิชา{% endblock %}</p>
+          <div class="hero-cta">
+            <a class="btn btn-primary btn-lg" href="{% url 'core:register' %}">
+              {% block hero_cta %}
+                <i class="fas fa-pencil-alt"></i> ลงทะเบียนตอนนี้
+              {% endblock %}
+            </a>
+          </div>
+        </div>
+        <div class="hero-illustration" aria-hidden="true">
+          <svg viewBox="0 0 220 220" xmlns="http://www.w3.org/2000/svg" role="img">
+            <defs>
+              <linearGradient id="g1" x1="0" x2="1" y1="0" y2="1">
+                <stop offset="0" stop-color="#9333ea" stop-opacity="0.8"/>
+                <stop offset="1" stop-color="#ec4899" stop-opacity="0.6"/>
+              </linearGradient>
+              <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+                <feGaussianBlur in="SourceAlpha" stdDeviation="3"/>
+                <feOffset dx="2" dy="4"/>
+                <feComponentTransfer>
+                  <feFuncA type="linear" slope="0.25"/>
+                </feComponentTransfer>
+                <feMerge>
+                  <feMergeNode/>
+                  <feMergeNode in="SourceGraphic"/>
+                </feMerge>
+              </filter>
+            </defs>
+            <!-- Decorative elements -->
+            <g stroke="#C48CFF" stroke-width="2" fill="none" opacity="0.6">
+              <path d="M14 26c6-8 18-10 26-6" filter="url(#shadow)"/>
+              <circle cx="14" cy="14" r="4" fill="#ec4899"/>
+              <path d="M20 16c4-4 12-4 16 0" opacity="0.5"/>
+            </g>
+            <!-- Main illustration -->
+            <g transform="translate(20,25)" filter="url(#shadow)">
+              <ellipse cx="90" cy="60" rx="40" ry="46" fill="url(#g1)" opacity="0.2"/>
+              <path d="M58 48c8-24 60-30 72 6c2 8 2 16 0 24c-10 28-66 30-72-6c-2-8 0-16 0-24z" fill="#2B1740" opacity="0.9"/>
+              <circle cx="86" cy="56" r="24" fill="#FFEBD9"/>
+              <path d="M76 62q10 14 20 0" stroke="#6b3d6d" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+              <circle cx="80" cy="54" r="2" fill="#2B1740"/>
+              <circle cx="92" cy="54" r="2" fill="#2B1740"/>
+              <rect x="58" y="86" width="50" height="38" rx="10" ry="10" fill="#FFF" stroke="#9333ea" stroke-width="2.5"/>
+              <line x1="65" y1="96" x2="98" y2="96" stroke="#e9d5ff" stroke-width="2"/>
+              <line x1="65" y1="103" x2="90" y2="103" stroke="#e9d5ff" stroke-width="2"/>
+              <line x1="65" y1="110" x2="95" y2="110" stroke="#e9d5ff" stroke-width="2"/>
+            </g>
+            <g transform="translate(160,160)" stroke="#C48CFF" stroke-width="2" fill="none" opacity="0.6">
+              <path d="M40 24c-6 8-18 10-26 6" filter="url(#shadow)"/>
+              <circle cx="40" cy="40" r="4" fill="#a855f7"/>
+              <path d="M34 38c-4-4-12-4-16 0" opacity="0.5"/>
+            </g>
+          </svg>
+        </div>
+      </div>
+    </section>
+    {% endblock %}
+
+    <!-- Database Warning -->
+    {% if db_error %}
+      <div class="container">
+        <div class="db-warning">
+          <i class="fas fa-exclamation-triangle"></i>
+          <strong>ฐานข้อมูลยังไม่พร้อม</strong> — ตารางบางตัวยังไม่ถูกสร้าง หากเป็นการติดตั้งครั้งแรก ให้รันคำสั่งจากโฟลเดอร์ d:\DjangoProject:
+          <br><br>
+          <code class="kbd">py manage.py makemigrations</code> 
+          และ 
+          <code class="kbd">py manage.py migrate</code>
+        </div>
+      </div>
+    {% endif %}
+
+    <!-- Main Content -->
+    <div id="content-wrapper">
+      <div class="container">
+        {% block content %}{% endblock %}
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="container">
+        <p>
+          &copy; {% now "Y" %} ระบบลงทะเบียน. 
+          Made with <i class="fas fa-heart text-accent"></i> 
+          by Your Team
+        </p>
+      </div>
+    </footer>
+  </div>
+</body>
+</html>

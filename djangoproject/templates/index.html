@@ -1,0 +1,1033 @@
+
+
+
+
+{% extends "base.html" %}
+
+
+
+{% block title %}หน้าแรก{% endblock %}
+
+{% block content %}
+<div class="home-wrapper">
+  <div class="main-layout">
+    <!-- Main Content Section -->
+    <section class="main-content">
+      <!-- Welcome Card -->
+      <div class="welcome-card feature-card">
+        <div class="card-glow"></div>
+        <div class="welcome-header">
+          <div class="icon-badge">
+            <i class="fas fa-graduation-cap"></i>
+          </div>
+          <div>
+            <h1>ยินดีต้อนรับสู่ระบบลงทะเบียนออนไลน์</h1>
+            <p class="lead-text">ระบบนี้ใช้จัดการข้อมูลคณะ สาขาวิชา วิชา นักศึกษา และการลงทะเบียนเรียน</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Announcements Section -->
+      <div class="announcements-section feature-card">
+        <div class="card-glow"></div>
+        <div class="section-header">
+          <div class="icon-wrapper">
+            <i class="fas fa-bullhorn"></i>
+          </div>
+          <h2>ประกาศล่าสุด</h2>
+        </div>
+        
+        {% if db_error %}
+          <div class="empty-state">
+            <i class="fas fa-database"></i>
+            <p>ข้อมูลประกาศยังไม่พร้อม (ฐานข้อมูลยังไม่ได้สร้าง)</p>
+          </div>
+        {% else %}
+          {% if announcements %}
+            <div class="announcement-list">
+              {% for a in announcements %}
+                <div class="announcement-item">
+                  <div class="announcement-icon">
+                    <i class="fas fa-bell"></i>
+                  </div>
+                  <div class="announcement-content">
+                    <h3>{{ a.title }}</h3>
+                    <span class="date-badge">
+                      <i class="fas fa-calendar"></i> {{ a.date }}
+                    </span>
+                    <p>{{ a.body }}</p>
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+          {% else %}
+            <div class="empty-state">
+              <i class="fas fa-inbox"></i>
+              <p>ไม่มีประกาศในขณะนี้</p>
+            </div>
+          {% endif %}
+        {% endif %}
+      </div>
+
+      <!-- News/Activities Section -->
+      <div class="news-section feature-card">
+        <div class="card-glow"></div>
+        <div class="section-header">
+          <div class="icon-wrapper">
+            <i class="fas fa-newspaper"></i>
+          </div>
+          <h2>ข่าวสาร / กิจกรรม</h2>
+        </div>
+
+        {% if db_error %}
+          <div class="empty-state">
+            <i class="fas fa-database"></i>
+            <p>ข่าว/กิจกรรมยังไม่พร้อม (ฐานข้อมูลยังไม่ได้สร้าง)</p>
+          </div>
+        {% else %}
+          {% if news %}
+            <div class="news-grid">
+              {% for n in news %}
+                <div class="news-card">
+                  <div class="news-icon">
+                    <i class="fas fa-star"></i>
+                  </div>
+                  <div class="news-content">
+                    <h3>{{ n.title }}</h3>
+                    <span class="date-badge">
+                      <i class="fas fa-clock"></i> {{ n.date }}
+                    </span>
+                    <p>{{ n.summary }}</p>
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+          {% else %}
+            <div class="empty-state">
+              <i class="fas fa-newspaper"></i>
+              <p>ไม่มีข่าวสารในขณะนี้</p>
+            </div>
+          {% endif %}
+        {% endif %}
+      </div>
+
+      <!-- Sample Data Section -->
+      <div class="samples-section feature-card">
+        <div class="card-glow"></div>
+        <div class="section-header">
+          <div class="icon-wrapper">
+            <i class="fas fa-database"></i>
+          </div>
+          <h2>ตัวอย่างข้อมูลในระบบ</h2>
+        </div>
+
+        <!-- Faculties Sample -->
+        <div class="data-section">
+          <h3 class="data-title">
+            <i class="fas fa-university"></i> ตัวอย่างคณะ
+          </h3>
+          {% if db_error %}
+            <div class="empty-state-mini">
+              <p>ข้อมูลคณะยังไม่พร้อม</p>
+            </div>
+          {% else %}
+            {% if faculties_sample %}
+              <div class="data-list">
+                {% for f in faculties_sample %}
+                  <div class="data-item">
+                    <span class="item-icon"><i class="fas fa-building"></i></span>
+                    <span class="item-text">{{ f.name }}</span>
+                    {% if f.code %}
+                      <span class="item-badge">{{ f.code }}</span>
+                    {% endif %}
+                  </div>
+                {% endfor %}
+              </div>
+            {% else %}
+              <div class="empty-state-mini">
+                <p>ไม่มีข้อมูลคณะ</p>
+              </div>
+            {% endif %}
+          {% endif %}
+        </div>
+
+        <!-- Departments Sample -->
+        <div class="data-section">
+          <h3 class="data-title">
+            <i class="fas fa-building"></i> ตัวอย่างสาขาวิชา
+          </h3>
+          {% if db_error %}
+            <div class="empty-state-mini">
+              <p>ข้อมูลสาขาวิชายังไม่พร้อม</p>
+            </div>
+          {% else %}
+            {% if departments_sample %}
+              <div class="data-list">
+                {% for d in departments_sample %}
+                  <div class="data-item">
+                    <span class="item-icon"><i class="fas fa-graduation-cap"></i></span>
+                    <span class="item-text">{{ d.name }}</span>
+                    {% if d.faculty %}
+                      <span class="item-info">คณะ: {{ d.faculty.name }}</span>
+                    {% endif %}
+                  </div>
+                {% endfor %}
+              </div>
+            {% else %}
+              <div class="empty-state-mini">
+                <p>ไม่มีข้อมูลสาขา</p>
+              </div>
+            {% endif %}
+          {% endif %}
+        </div>
+
+        <!-- Courses Sample -->
+        <div class="data-section">
+          <h3 class="data-title">
+            <i class="fas fa-book"></i> ตัวอย่างวิชา
+          </h3>
+          {% if db_error %}
+            <div class="empty-state-mini">
+              <p>ข้อมูลวิชายังไม่พร้อม</p>
+            </div>
+          {% else %}
+            {% if courses_sample %}
+              <div class="data-list">
+                {% for c in courses_sample %}
+                  <div class="data-item">
+                    <span class="item-icon"><i class="fas fa-book-open"></i></span>
+                    <div class="item-details">
+                      <span class="item-code">{{ c.code }}</span>
+                      <span class="item-text">{{ c.name }}</span>
+                      <span class="item-badge">{{ c.units }} หน่วยกิต</span>
+                      {% if c.department %}
+                        <span class="item-info">สาขา: {{ c.department.name }}</span>
+                      {% endif %}
+                    </div>
+                  </div>
+                {% endfor %}
+              </div>
+            {% else %}
+              <div class="empty-state-mini">
+                <p>ไม่มีข้อมูลวิชา</p>
+              </div>
+            {% endif %}
+          {% endif %}
+        </div>
+      </div>
+    </section>
+
+    <!-- Sidebar Section -->
+    <aside class="sidebar">
+      <!-- Calendar Widget -->
+      <div class="widget feature-card">
+        <div class="card-glow"></div>
+        <div class="widget-header">
+          <i class="fas fa-calendar-alt"></i>
+          <h3>ปฏิทินการศึกษา</h3>
+        </div>
+        
+        {% if db_error %}
+          <div class="empty-state-mini">
+            <i class="fas fa-calendar-times"></i>
+            <p>ปฏิทินยังไม่พร้อม</p>
+          </div>
+        {% else %}
+          {% if events %}
+            <div class="events-list">
+              {% for e in events %}
+                <div class="event-item">
+                  <div class="event-date">
+                    <i class="fas fa-circle"></i>
+                    <span>{{ e.date }}</span>
+                  </div>
+                  <div class="event-title">{{ e.title }}</div>
+                </div>
+              {% endfor %}
+            </div>
+          {% else %}
+            <div class="empty-state-mini">
+              <i class="fas fa-calendar-times"></i>
+              <p>ไม่มีเหตุการณ์</p>
+            </div>
+          {% endif %}
+        {% endif %}
+      </div>
+
+      <!-- Login/Register Widget -->
+      <div class="widget feature-card">
+        <div class="card-glow"></div>
+        <div class="widget-header">
+          <i class="fas fa-user"></i>
+          <h3>บัญชีผู้ใช้</h3>
+        </div>
+        
+        {% if request.user.is_authenticated %}
+          <div class="user-welcome">
+            <div class="user-avatar">
+              <i class="fas fa-user-circle"></i>
+            </div>
+            <div class="user-info">
+              <p class="greeting">สวัสดี</p>
+              <p class="username">{{ request.user.get_full_name|default:request.user.username }}</p>
+            </div>
+          </div>
+          <a href="{% url 'core:register' %}" class="widget-btn">
+            <i class="fas fa-pencil-alt"></i>
+            <span>ลงทะเบียนวิชา</span>
+            <i class="fas fa-arrow-right"></i>
+          </a>
+        {% else %}
+          <div class="auth-buttons">
+            <a href="{% url 'core:login' %}" class="widget-btn primary">
+              <i class="fas fa-sign-in-alt"></i>
+              <span>เข้าสู่ระบบ</span>
+            </a>
+            <a href="{% url 'core:signup' %}" class="widget-btn secondary">
+              <i class="fas fa-user-plus"></i>
+              <span>สมัครสมาชิก</span>
+            </a>
+          </div>
+        {% endif %}
+      </div>
+
+      <!-- Quick Links Widget -->
+      <div class="widget feature-card">
+        <div class="card-glow"></div>
+        <div class="widget-header">
+          <i class="fas fa-link"></i>
+          <h3>ลิงก์ด่วน</h3>
+        </div>
+        
+        <div class="quick-links">
+          <a href="{% url 'core:faculties' %}" class="quick-link">
+            <i class="fas fa-university"></i>
+            <span>ดูรายชื่อคณะ</span>
+            <i class="fas fa-chevron-right"></i>
+          </a>
+          <a href="{% url 'core:departments' %}" class="quick-link">
+            <i class="fas fa-building"></i>
+            <span>ดูสาขาวิชา</span>
+            <i class="fas fa-chevron-right"></i>
+          </a>
+          <a href="{% url 'core:courses' %}" class="quick-link">
+            <i class="fas fa-book"></i>
+            <span>ดูรายวิชา</span>
+            <i class="fas fa-chevron-right"></i>
+          </a>
+        </div>
+      </div>
+    </aside>
+  </div>
+</div>
+
+<style>
+/* Home Wrapper */
+.home-wrapper {
+  padding: 40px 0 80px;
+}
+
+.main-layout {
+  display: grid;
+  grid-template-columns: 1fr 360px;
+  gap: 32px;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* Feature Card Base Styles */
+.feature-card {
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  padding: 32px;
+  box-shadow: 0 4px 20px rgba(147, 51, 234, 0.08);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(147, 51, 234, 0.1);
+  margin-bottom: 24px;
+}
+
+.feature-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #9333ea 0%, #ec4899 50%, #a855f7 100%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.feature-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(147, 51, 234, 0.15);
+  border-color: rgba(147, 51, 234, 0.3);
+}
+
+.feature-card:hover::before {
+  opacity: 1;
+}
+
+.card-glow {
+  position: absolute;
+  top: -50%;
+  right: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(147, 51, 234, 0.1) 0%, transparent 70%);
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  pointer-events: none;
+}
+
+.feature-card:hover .card-glow {
+  opacity: 1;
+}
+
+/* Welcome Card */
+.welcome-card {
+  margin-bottom: 32px;
+}
+
+.welcome-header {
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+}
+
+.icon-badge {
+  width: 72px;
+  height: 72px;
+  background: linear-gradient(135deg, #9333ea 0%, #ec4899 100%);
+  border-radius: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 2rem;
+  box-shadow: 0 8px 24px rgba(147, 51, 234, 0.3);
+  flex-shrink: 0;
+}
+
+.welcome-header h1 {
+  margin: 0 0 12px 0;
+  font-size: 2rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #9333ea 0%, #ec4899 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1.3;
+}
+
+.lead-text {
+  color: #6b7280;
+  font-size: 1.0625rem;
+  line-height: 1.7;
+  margin: 0;
+}
+
+/* Section Headers */
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 28px;
+  padding-bottom: 20px;
+  border-bottom: 2px solid rgba(147, 51, 234, 0.1);
+}
+
+.icon-wrapper {
+  width: 48px;
+  height: 48px;
+  background: linear-gradient(135deg, #9333ea 0%, #ec4899 100%);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.5rem;
+  box-shadow: 0 4px 12px rgba(147, 51, 234, 0.3);
+  flex-shrink: 0;
+}
+
+.section-header h2 {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+/* Announcement List */
+.announcement-list {
+  display: grid;
+  gap: 20px;
+}
+
+.announcement-item {
+  display: flex;
+  gap: 16px;
+  padding: 20px;
+  background: linear-gradient(135deg, rgba(147, 51, 234, 0.03) 0%, rgba(236, 72, 153, 0.03) 100%);
+  border-radius: 14px;
+  border: 1px solid rgba(147, 51, 234, 0.1);
+  transition: all 0.3s ease;
+}
+
+.announcement-item:hover {
+  background: linear-gradient(135deg, rgba(147, 51, 234, 0.08) 0%, rgba(236, 72, 153, 0.08) 100%);
+  transform: translateX(4px);
+  box-shadow: 0 4px 16px rgba(147, 51, 234, 0.1);
+}
+
+.announcement-icon {
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, #9333ea 0%, #ec4899 100%);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.125rem;
+  flex-shrink: 0;
+  box-shadow: 0 4px 12px rgba(147, 51, 234, 0.25);
+}
+
+.announcement-content {
+  flex: 1;
+}
+
+.announcement-content h3 {
+  margin: 0 0 8px 0;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.date-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  background: rgba(147, 51, 234, 0.1);
+  border-radius: 6px;
+  font-size: 0.875rem;
+  color: #9333ea;
+  margin-bottom: 8px;
+}
+
+.announcement-content p {
+  margin: 12px 0 0 0;
+  color: #6b7280;
+  line-height: 1.6;
+}
+
+/* News Grid */
+.news-grid {
+  display: grid;
+  gap: 16px;
+}
+
+.news-card {
+  display: flex;
+  gap: 16px;
+  padding: 20px;
+  background: linear-gradient(135deg, rgba(147, 51, 234, 0.03) 0%, rgba(236, 72, 153, 0.03) 100%);
+  border-radius: 14px;
+  border: 1px solid rgba(147, 51, 234, 0.1);
+  transition: all 0.3s ease;
+}
+
+.news-card:hover {
+  background: linear-gradient(135deg, rgba(147, 51, 234, 0.08) 0%, rgba(236, 72, 153, 0.08) 100%);
+  transform: translateX(4px);
+  box-shadow: 0 4px 16px rgba(147, 51, 234, 0.1);
+}
+
+.news-icon {
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, #ec4899 0%, #a855f7 100%);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.125rem;
+  flex-shrink: 0;
+  box-shadow: 0 4px 12px rgba(236, 72, 153, 0.25);
+}
+
+.news-content h3 {
+  margin: 0 0 8px 0;
+  font-size: 1.0625rem;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.news-content p {
+  margin: 12px 0 0 0;
+  color: #6b7280;
+  line-height: 1.6;
+}
+
+/* Data Sections */
+.data-section {
+  margin-bottom: 28px;
+}
+
+.data-section:last-child {
+  margin-bottom: 0;
+}
+
+.data-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 16px 0;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #1f2937;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(147, 51, 234, 0.1);
+}
+
+.data-title i {
+  color: #9333ea;
+}
+
+.data-list {
+  display: grid;
+  gap: 12px;
+}
+
+.data-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  background: rgba(147, 51, 234, 0.03);
+  border-radius: 10px;
+  border: 1px solid rgba(147, 51, 234, 0.08);
+  transition: all 0.2s ease;
+  flex-wrap: wrap;
+}
+
+.data-item:hover {
+  background: rgba(147, 51, 234, 0.08);
+  border-color: rgba(147, 51, 234, 0.15);
+}
+
+.item-icon {
+  width: 32px;
+  height: 32px;
+  background: linear-gradient(135deg, #9333ea 0%, #ec4899 100%);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 0.875rem;
+  flex-shrink: 0;
+}
+
+.item-text {
+  flex: 1;
+  color: #1f2937;
+  font-weight: 500;
+  min-width: 0;
+}
+
+.item-details {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  flex: 1;
+}
+
+.item-code {
+  padding: 4px 10px;
+  background: linear-gradient(135deg, #9333ea 0%, #ec4899 100%);
+  color: white;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  font-family: monospace;
+}
+
+.item-badge {
+  padding: 4px 10px;
+  background: rgba(147, 51, 234, 0.15);
+  color: #9333ea;
+  border-radius: 6px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+}
+
+.item-info {
+  color: #6b7280;
+  font-size: 0.875rem;
+}
+
+/* Empty States */
+.empty-state {
+  text-align: center;
+  padding: 48px 24px;
+  color: #9ca3af;
+}
+
+.empty-state i {
+  font-size: 3rem;
+  margin-bottom: 16px;
+  opacity: 0.5;
+}
+
+.empty-state p {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.empty-state-mini {
+  text-align: center;
+  padding: 24px;
+  color: #9ca3af;
+}
+
+.empty-state-mini i {
+  font-size: 2rem;
+  margin-bottom: 8px;
+  opacity: 0.5;
+}
+
+.empty-state-mini p {
+  margin: 0;
+  font-size: 0.9375rem;
+}
+
+/* Sidebar Widgets */
+.widget {
+  padding: 24px;
+  margin-bottom: 20px;
+}
+
+.widget:last-child {
+  margin-bottom: 0;
+}
+
+.widget-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 2px solid rgba(147, 51, 234, 0.1);
+}
+
+.widget-header i {
+  width: 36px;
+  height: 36px;
+  background: linear-gradient(135deg, #9333ea 0%, #ec4899 100%);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.125rem;
+  flex-shrink: 0;
+}
+
+.widget-header h3 {
+  margin: 0;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+/* Events List */
+.events-list {
+  display: grid;
+  gap: 12px;
+}
+
+.event-item {
+  padding: 12px;
+  background: rgba(147, 51, 234, 0.03);
+  border-radius: 10px;
+  border-left: 3px solid #9333ea;
+  transition: all 0.2s ease;
+}
+
+.event-item:hover {
+  background: rgba(147, 51, 234, 0.08);
+  transform: translateX(4px);
+}
+
+.event-date {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #9333ea;
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.event-date i {
+  font-size: 0.5rem;
+}
+
+.event-title {
+  color: #1f2937;
+  font-size: 0.9375rem;
+  line-height: 1.5;
+}
+
+/* User Welcome */
+.user-welcome {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 20px;
+  background: linear-gradient(135deg, rgba(147, 51, 234, 0.08) 0%, rgba(236, 72, 153, 0.08) 100%);
+  border-radius: 12px;
+  margin-bottom: 16px;
+}
+
+.user-avatar {
+  width: 56px;
+  height: 56px;
+  background: linear-gradient(135deg, #9333ea 0%, #ec4899 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 2rem;
+  flex-shrink: 0;
+  box-shadow: 0 4px 16px rgba(147, 51, 234, 0.3);
+}
+
+.user-info .greeting {
+  margin: 0 0 4px 0;
+  color: #6b7280;
+  font-size: 0.875rem;
+}
+
+.user-info .username {
+  margin: 0;
+  color: #1f2937;
+  font-size: 1.0625rem;
+  font-weight: 600;
+}
+
+/* Widget Buttons */
+.auth-buttons {
+  display: grid;
+  gap: 12px;
+}
+
+.widget-btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 18px;
+  background: linear-gradient(135deg, #9333ea 0%, #ec4899 100%);
+  color: white;
+  text-decoration: none;
+  border-radius: 10px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(147, 51, 234, 0.2);
+}
+
+.widget-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(147, 51, 234, 0.3);
+}
+
+.widget-btn.secondary {
+  background: white;
+  color: #9333ea;
+  border: 2px solid #9333ea;
+}
+
+.widget-btn.secondary:hover {
+  background: #9333ea;
+  color: white;
+}
+
+.widget-btn span {
+  flex: 1;
+  text-align: center;
+}
+
+/* Quick Links */
+.quick-links {
+  display: grid;
+  gap: 10px;
+}
+
+.quick-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  background: rgba(147, 51, 234, 0.03);
+  border-radius: 10px;
+  text-decoration: none;
+  color: #1f2937;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  border: 1px solid rgba(147, 51, 234, 0.08);
+}
+
+.quick-link:hover {
+  background: rgba(147, 51, 234, 0.08);
+  transform: translateX(4px);
+  border-color: rgba(147, 51, 234, 0.15);
+}
+
+.quick-link i:first-child {
+  width: 32px;
+  height: 32px;
+  background: linear-gradient(135deg, #9333ea 0%, #ec4899 100%);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 0.875rem;
+  flex-shrink: 0;
+}
+
+.quick-link span {
+  flex: 1;
+  font-size: 0.9375rem;
+}
+
+.quick-link i:last-child {
+  color: #9333ea;
+  font-size: 0.75rem;
+  opacity: 0.6;
+  transition: all 0.2s ease;
+}
+
+.quick-link:hover i:last-child {
+  opacity: 1;
+  transform: translateX(4px);
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .main-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .sidebar {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+  }
+
+  .widget {
+    margin-bottom: 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .home-wrapper {
+    padding: 24px 0 60px;
+  }
+
+  .main-layout {
+    padding: 0 16px;
+  }
+
+  .feature-card {
+    padding: 24px 20px;
+  }
+
+  .welcome-header {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .welcome-header h1 {
+    font-size: 1.5rem;
+  }
+
+  .section-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .section-header h2 {
+    font-size: 1.25rem;
+  }
+
+  .announcement-item,
+  .news-card {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .data-item {
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+  }
+
+  .item-details {
+    width: 100%;
+  }
+
+  .sidebar {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .icon-badge {
+    width: 56px;
+    height: 56px;
+    font-size: 1.5rem;
+  }
+
+  .welcome-header h1 {
+    font-size: 1.375rem;
+  }
+
+  .lead-text {
+    font-size: 1rem;
+  }
+
+  .feature-card {
+    padding: 20px 16px;
+  }
+}
+
+/* Print Styles */
+@media print {
+  .sidebar,
+  .card-glow,
+  .feature-card::before {
+    display: none;
+  }
+
+  .feature-card {
+    box-shadow: none;
+    border: 1px solid #ddd;
+    page-break-inside: avoid;
+  }
+}
+</style>
+{% endblock %}

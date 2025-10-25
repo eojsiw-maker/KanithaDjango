@@ -1,0 +1,40 @@
+# Python
+*.py[cod]
+__pycache__/
+*.so
+.Python
+env/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Django
+*.log
+*.pot
+*.pyc
+local_settings.py
+db.sqlite3
+
+# Virtual Environment
+.env
+.venv
+venv/
+ENV/
+
+# VS Code
+.vscode/
+*.code-workspace
+
+# Other
+.DS_Store
+Thumbs.db

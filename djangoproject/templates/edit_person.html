@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Person{% endblock %}
+
+{% block content %}
+  <h2>{{ title }}</h2>
+  <form method="post">
+    {% csrf_token %}
+    <p><label>Name:<br><input type="text" name="name" value="{{ person.name|escape }}" /></label></p>
+    <p><label>Role:<br><input type="text" name="role" value="{{ person.role|escape }}" /></label></p>
+    <p><button type="submit">Save</button> <a href="{% url 'person' %}">Cancel</a></p>
+  </form>
+{% endblock %}
