@@ -49,4 +49,4 @@ python manage.py runserver
 - Django
 - SQLite
 - HTML/CSS
-- Bootstrap
+- Bootstrap# KanithaDjango  
